@@ -56,7 +56,9 @@ end
 
 rangedweapons_reload_gun = function(itemstack, player)
 
-GunCaps = itemstack:get_definition().RW_gun_capabilities
+-- WARNING: Assignment to undeclared global "GunCaps" inside a function at mods/rangedweapons/init.lua:59.
+-- I think GunCaps needs to be local
+local GunCaps = itemstack:get_definition().RW_gun_capabilities
 
 if GunCaps ~= nil then
 gun_unload_sound = GunCaps.gun_unload_sound or ""
@@ -388,7 +390,9 @@ end
 local OnCollision = function() end
 
 local bulletStack = ItemStack({name = gunMeta:get_string("RW_ammo_name")})
-AmmoCaps = bulletStack:get_definition().RW_ammo_capabilities
+-- WARNING: Assignment to undeclared global "AmmoCaps" inside a function at mods/rangedweapons/init.lua:391.
+-- Solution, Make local
+local AmmoCaps = bulletStack:get_definition().RW_ammo_capabilities
 
 local gun_damage = {fleshy=1}
 local gun_sound = "rangedweapons_glock"
@@ -433,6 +437,7 @@ local bullet_glow = 20
 
 
 if GunCaps ~= nil then
+-- Potential Warnings, see line 448
 gun_damage = GunCaps.gun_damage or {fleshy=1}
 gun_sound = GunCaps.gun_sound or "rangedweapons_glock"
 gun_velocity = GunCaps.gun_velocity or 20
@@ -440,7 +445,8 @@ gun_accuracy = GunCaps.gun_accuracy or 100
 gun_cooling = GunCaps.gun_cooling or itemstack:get_name()
 gun_crit = GunCaps.gun_crit or 0
 gun_critEffc = GunCaps.gun_critEffc or 1
-gun_projectiles = GunCaps.gun_projectiles or 1
+-- WARNING: Assignment to undeclared global "gun_projectiles" inside a function at mods/rangedweapons/init.lua:443.
+local gun_projectiles = GunCaps.gun_projectiles or 1
 gun_mobPen = GunCaps.gun_mob_penetration or 0
 gun_nodePen = GunCaps.gun_node_penetration or 0
 gun_shell = GunCaps.has_shell or 0
@@ -522,6 +528,11 @@ end
 end
 
 --minetest.chat_send_all(minetest.serialize(combined_dmg))
+
+-- WARNING: Assignment to undeclared global "skill_value" inside a function at mods/rangedweapons/init.lua:527.
+-- Solution, making a local with a default
+
+local skill_value = 1 -- Defaulting to 1
 
 if gun_skill ~= "" then
 skill_value = playerMeta:get_int(gun_skill)/100
@@ -673,6 +684,8 @@ shl:set_properties({
 textures = {shellTexture},
 visual = shellVisual,})
 	end	
+local projectiles = 1 -- Defaults
+local rndacc = 0 -- Defaults
 if smokeSize > 0 then
 	minetest.add_particle({
 		pos = pos,
@@ -686,9 +699,11 @@ if smokeSize > 0 then
 		glow = 5,
 	})
 end
-
+	-- WARNING: Assignment to undeclared global "projectiles" inside a function at mods/rangedweapons/init.lua:690.
+	-- I will add a local above this so it "exists"
 	projectiles = projNum or 1
 	for i=1,projectiles do
+		-- Reacurring Warning on line 701
 		rndacc = (100 - accuracy) or 0
 local spawnpos_x = pos.x + (math.random(-rndacc,rndacc)/100)
 local spawnpos_y = pos.y + (math.random(-rndacc,rndacc)/100)
@@ -722,7 +737,9 @@ glow = proj_glow,}
 			ent.timer = 0 + (combined_velocity/2000)
 			ent.wear = proj_wear
 				obj:set_velocity({x=dir.x * combined_velocity, y=dir.y * combined_velocity, z=dir.z * combined_velocity})
-				acc = ((( 100 - accuracy ) / 10) / skill_value ) or 0
+				-- WARNING: Assignment to undeclared global "acc" inside a function at mods/rangedweapons/init.lua:725.
+				-- Making local
+				local acc = ((( 100 - accuracy ) / 10) / skill_value ) or 0
 				obj:set_acceleration({x=math.random(-acc,acc), y=math.random(-acc,acc)-gravity, z=math.random(-acc,acc)})
 obj:set_rotation({x=0,y=yaw + math.pi,z=-svertical})
 	end end end
@@ -922,7 +939,9 @@ minetest.register_abm({
 })
 
 minetest.register_on_joinplayer(function(player)
- gunammo = 
+  -- WARNING: Assignment to undeclared global "gunammo" inside a function at mods/rangedweapons/init.lua:935
+  -- Solution, make it local... not global
+ local gunammo = 
 	player:hud_add({
 	hud_elem_type = "text",
 	name = "gunammo",
@@ -933,7 +952,8 @@ minetest.register_on_joinplayer(function(player)
 	offset = {x = 30, y = 100},
 	alignment = {x = 0, y = -1}
 	})
- gunimg = 
+  -- Reaccuring Warning see Line 927
+ local gunimg = 
 	player:hud_add({
 	hud_elem_type = "image",
 	text = "rangedweapons_empty_icon.png",
@@ -942,7 +962,8 @@ minetest.register_on_joinplayer(function(player)
 	offset = {x = 30, y = 100},
 	alignment = {x = 0, y = -1}
 	})
- ammoimg = 
+  -- Reaccuring Warning see Line 927
+ local ammoimg = 
 	player:hud_add({
 	hud_elem_type = "image",
 	text = "rangedweapons_empty_icon.png",
@@ -951,7 +972,8 @@ minetest.register_on_joinplayer(function(player)
 	offset = {x = 30, y = 100},
 	alignment = {x = 0, y = -1}
 	})
- hit = 
+  -- Reaccuring Warning see Line 927
+ local hit = 
 	player:hud_add({
 	hud_elem_type = "image",
 	text = "rangedweapons_empty_icon.png",
@@ -960,7 +982,8 @@ minetest.register_on_joinplayer(function(player)
 	offset = {x = 0, y = 0},
 	alignment = {x = 0, y = 0}
 	})
-scope_hud = 
+  -- Reaccuring Warning see Line 927
+local scope_hud = 
 	player:hud_add({
 	hud_elem_type = "image",
 	position = { x=0.5, y=0.5 },
