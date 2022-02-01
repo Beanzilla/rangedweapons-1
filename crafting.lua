@@ -19,15 +19,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "rangedweapons:ak47",
-	recipe = {
-		{"default:diamond", "default:steel_ingot", "default:tree"},
-		{"default:tree", "default:mese", "default:steel_ingot"},
-		{"default:steel_ingot", "", "default:tree"},
-	}
-})
-
-minetest.register_craft({
 	output = "rangedweapons:awp",
 	recipe = {
 		{"rangedweapons:gunsteel_ingot", "default:diamondblock", "rangedweapons:gunsteel_ingot"},
